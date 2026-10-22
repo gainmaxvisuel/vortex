@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0877c9">
+<title>Mission — VORTEX</title>
+<style>
+:root{--blue:#0877c9;--deep:#075fa5;--bg:#f3f6fa;--text:#182230;--muted:#667085;--line:#dce3eb;--green:#217346;--gold:#946200;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text)}
+header{height:62px;background:var(--blue);color:white;display:flex;align-items:center;gap:13px;padding:0 16px;box-shadow:0 2px 8px #0001}
+.back{display:grid;place-items:center;width:34px;height:34px;color:white;text-decoration:none}.back svg{width:24px;height:24px}h1{font-size:18px;margin:0;font-weight:700}
+main{max-width:760px;margin:18px auto;padding:0 12px 32px}
+.hero{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:13px}
+.eyebrow{font-size:12px;color:var(--muted);margin-bottom:7px}.hero h2{font-size:20px;margin:0 0 7px}.hero p{font-size:13px;color:var(--muted);line-height:1.5;margin:0}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:15px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px}.stat .label{font-size:12px;color:var(--muted);line-height:1.4}.stat .number{font-size:23px;font-weight:700;margin-top:7px}.stat .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.section-title{font-size:16px;margin:20px 2px 10px}
+.milestones{display:grid;gap:10px}
+.milestone{background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px}
+.m-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.m-title{font-weight:700;font-size:15px}.reward{font-size:16px;font-weight:700;text-align:right;white-space:nowrap}
+.meta{font-size:12px;color:var(--muted);margin-top:6px}.progress{height:6px;background:#e9eef4;border-radius:10px;overflow:hidden;margin-top:12px}.bar{height:100%;background:var(--blue);border-radius:10px;width:0}
+.m-bottom{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:12px}.state{font-size:12px;font-weight:700;color:var(--muted)}.state.ready{color:var(--green)}.state.done{color:var(--green)}
+button{font:inherit}.claim{border:0;border-radius:7px;padding:10px 13px;background:var(--blue);color:white;font-size:13px;font-weight:700;min-width:100px}.claim:disabled{background:#d0d5dd;color:#667085}
+.notice{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;font-size:13px;color:var(--muted);line-height:1.5}.notice.error{color:var(--red)}.notice.success{color:var(--green)}
+.small{font-size:12px;color:var(--muted);line-height:1.5;margin-top:12px}
+@media(min-width:600px){main{margin-top:24px}.milestones{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header>
+<a class="back" href="moi.html" aria-label="Retour à la page Moi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+<h1>Mission</h1>
+</header>
+<main>
+<section class="hero"><div class="eyebrow">PROGRAMME DE PARRAINAGE</div><h2>Récompenses de mission</h2><p>Invitez des personnes à rejoindre VORTEX. Lorsqu’un filleul direct achète au moins un produit, il compte comme un investisseur pour les paliers de mission. Réclamez chaque récompense une seule fois lorsque le palier est atteint.</p></section>
+<section class="stats">
+<div class="stat"><div class="label">Personnes invitées directement</div><div class="number" id="invites">—</div><div class="sub">Niveau 1</div></div>
+<div class="stat"><div class="label">Filleuls ayant investi</div><div class="number" id="investors">—</div><div class="sub">Achat d’au moins un produit</div></div>
+</section>
+<h2 class="section-title">Paliers de récompense</h2>
+<section id="milestones" class="milestones"><div class="notice">Chargement des missions…</div></section>
+<div class="small">Les récompenses sont créditées après réclamation réussie. Les données sont chargées depuis le compte connecté. La devise est celle du compte : XOF ou XAF.</div>
+</main>
+<script>
+(()=>{'use strict';
+const API='https://pjsfamxyftxzmjeywbgh.supabase.co/functions/v1/vortex-actions';
+const $=id=>document.getElementById(id);
+let missionData=null;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=(n,c)=>`${Number(n||0).toLocaleString('fr-FR',{maximumFractionDigits:2})} ${c||'XOF'}`;
+async function call(action,extra={}){const token=sessionStorage.getItem('vortex_session_token');if(!token)throw new Error('Session introuvable. Connectez-vous pour accéder aux missions.');const response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action,...extra})});const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.error||'La demande a échoué.');return data;}
+function render(data){missionData=data;$('invites').textContent=Number(data.direct_invites||0).toLocaleString('fr-FR');$('investors').textContent=Number(data.direct_investors||0).toLocaleString('fr-FR');const currency=data.currency||'XOF';const levels=Array.isArray(data.milestones)?data.milestones:[];
+if(!levels.length){$('milestones').innerHTML='<div class="notice">Aucun palier de mission n’est configuré dans la base de données.</div>';return;}
+$('milestones').innerHTML=levels.sort((a,b)=>a.level1_investors-b.level1_investors).map(m=>{const need=Number(m.level1_investors||0),count=Number(data.direct_investors||0),pct=need?Math.min(100,count/need*100):0;let label=m.claimed?'Récompense déjà reçue':m.eligible?'Palier atteint — récompense disponible':`Encore ${Math.max(0,need-count)} investisseur${need-count===1?'':'s'} requis`;let state=m.claimed?'done':m.eligible?'ready':'';return `<article class="milestone"><div class="m-top"><div><div class="m-title">${need} filleuls investisseurs</div><div class="meta">Niveau 1 · ${count} actuellement</div></div><div class="reward">${money(m.reward,currency)}</div></div><div class="progress"><div class="bar" style="width:${pct}%"></div></div><div class="m-bottom"><span class="state ${state}">${esc(label)}</span><button class="claim" data-level="${need}" ${m.eligible?'':'disabled'}>${m.claimed?'Réclamée':m.eligible?'Réclamer':'Verrouillée'}</button></div></article>`;}).join('');
+document.querySelectorAll('.claim:not(:disabled)').forEach(btn=>btn.addEventListener('click',()=>claim(Number(btn.dataset.level),btn)));
+}
+async function claim(level,btn){if(!confirm('Confirmer la réclamation de la récompense pour le palier de '+level+' filleuls investisseurs ?'))return;btn.disabled=true;btn.textContent='Traitement…';try{const result=await call('claim_mission',{level1_investors:level});alert('Récompense créditée : '+money(result.reward,result.currency||missionData?.currency));await load();}catch(e){alert(e.message||'Impossible de réclamer cette récompense.');btn.disabled=false;btn.textContent='Réclamer';}}
+async function load(){try{const data=await call('mission_data');render(data);}catch(e){$('milestones').innerHTML=`<div class="notice error">${esc(e.message)}<div class="small">Vérifiez que les actions mission_data et claim_mission sont déployées dans la fonction VORTEX.</div></div>`;$('invites').textContent='—';$('investors').textContent='—';}}
+load();
+})();
+</script>
+</body>
+</html>
