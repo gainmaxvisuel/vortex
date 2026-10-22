@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e2150">
+<title>Historique | Vortex</title>
+<style>
+:root{--navy:#0e2150;--blue:#1769f5;--ink:#13264e;--muted:#6d7c98;--bg:#f5f8fd;--line:#e2ebfb;--green:#0c7a4b;--red:#c0283c;--amber:#9a6500}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);padding-bottom:24px}
+a,button{font:inherit;color:inherit;text-decoration:none}button{cursor:pointer}svg{display:block}
+
+.top{background:linear-gradient(115deg,#0c1d47,#142a5e);color:#fff;padding:9px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 5px 20px #10245128;min-height:56px}
+.back{width:38px;height:38px;border-radius:50%;background:#ffffff18;display:grid;place-items:center;flex:0 0 auto}
+.back svg{width:22px;height:22px}
+.top h1{margin:0;font-size:18px;font-weight:700;flex:1}
+.vlogo{width:36px;height:30px}
+
+main{max-width:760px;margin:auto;padding:12px 12px 14px}
+
+.summary{position:relative;overflow:hidden;border-radius:18px;padding:16px;color:#fff;background:linear-gradient(150deg,#143c8a,#0b1f4f);box-shadow:0 8px 22px #112c5420;margin-bottom:12px}
+.summary:after{content:"";position:absolute;width:240px;height:100px;border:1px solid #49aaff35;border-radius:50%;right:-60px;bottom:-45px;transform:rotate(-14deg)}
+.summary .label{font-size:12px;color:#d1def7}
+.summary .value{font-size:26px;font-weight:800;margin-top:6px;letter-spacing:-.4px}
+.summary .small{font-size:11px;color:#c4d5f5;margin-top:5px}
+
+.filters{display:flex;gap:7px;overflow:auto;padding:2px 0 10px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filter{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:30px;padding:9px 14px;color:#355b94;font-weight:700;font-size:12px}
+.filter.active{background:linear-gradient(110deg,#1b7bff,#0a4cd0);color:#fff;border-color:transparent}
+
+#list{display:grid;gap:10px}
+.tx{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;box-shadow:0 5px 14px #10245108}
+.thead{display:flex;align-items:center;gap:11px;padding-bottom:11px;border-bottom:1px dashed var(--line)}
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:0 0 auto;background:#eaf1ff;color:#175ed1}
+.ico svg{width:21px;height:21px}
+.ico.in{background:#e6f6ee;color:#18794e}
+.ico.out{background:#ffeef0;color:#c0283c}
+.ico.inc{background:#f0edff;color:#5b46b8}
+.ico.gift{background:#fff1e2;color:#c76514}
+.tname{flex:1;min-width:0}
+.tname b{display:block;font-size:14.5px;color:var(--navy)}
+.tname small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.amount{font-weight:800;font-size:15px;text-align:right;white-space:nowrap}
+.amount.plus{color:var(--green)}
+.amount.minus{color:var(--red)}
+.row{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #edf2fa;font-size:12.5px}
+.row:last-child{border-bottom:0;padding-bottom:0}
+.key{color:var(--muted)}
+.val{text-align:right;overflow-wrap:anywhere;max-width:64%;font-weight:600;color:#1f3358}
+.chip{display:inline-block;border-radius:20px;padding:3px 9px;font-size:10.5px;font-weight:800}
+.chip.success{background:#e3f6ef;color:var(--green)}
+.chip.pending{background:#fff2dc;color:var(--amber)}
+.chip.failed{background:#ffeef0;color:var(--red)}
+.chip.neutral{background:#eef2f8;color:#47607f}
+.message{background:#fff;border:1px dashed #b8cfee;border-radius:16px;padding:26px 14px;text-align:center;color:#6380aa;line-height:1.5;font-size:13px}
+.message.error{color:var(--red);border-color:#f0c9cf}
+
+.bottom{position:fixed;z-index:5;bottom:0;left:0;right:0;background:#ffffffee;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid #e2e9f4;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px calc(5px + env(safe-area-inset-bottom));box-shadow:0 -5px 18px #0d21450a}
+.bottom a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:#7585a1;padding:2px}
+.bottom svg{width:23px;height:23px}
+.bottom a.active{color:var(--blue);font-weight:600}
+@media(min-width:700px){main{padding:24px}.tx{padding:16px 18px}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="vg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d3f2"/><stop offset=".55" stop-color="#1a7cf5"/><stop offset="1" stop-color="#1448d6"/></linearGradient>
+    <symbol id="vmark" viewBox="0 0 64 52"><path d="M2 3h15l15 27L47 3h15L40 46a9 9 0 0 1-16 0z" fill="url(#vg)"/><path d="M17 3l15 27 4-7L24 3z" fill="#ffffff2e"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <a class="back" href="moi.html" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></a>
+  <h1>Historique</h1>
+  <svg class="vlogo"><use href="#vmark"/></svg>
+</header>
+
+<main>
+  <nav class="filters" aria-label="Filtrer">
+    <button class="filter active" data-filter="all">Toutes</button>
+    <button class="filter" data-filter="deposit">Recharges</button>
+    <button class="filter" data-filter="withdraw">Retraits</button>
+    <button class="filter" data-filter="income">Revenus et commissions</button>
+    <button class="filter" data-filter="other">Autres</button>
+  </nav>
+
+  <section id="list"><div class="message">Chargement de l’historique…</div></section>
+</main>
+
+<script>
+(()=>{'use strict';
+const API='https://pjsfamxyftxzmjeywbgh.supabase.co/functions/v1/vortex-actions';
+const $=id=>document.getElementById(id);
+let transactions=[],filter='all';
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=(n,c)=>`${Number(n||0).toLocaleString('fr-FR',{maximumFractionDigits:2})} ${c||'XOF'}`;
+const date=s=>{if(!s)return'—';const d=new Date(s);return Number.isNaN(d.getTime())?'—':d.toLocaleString('fr-FR',{dateStyle:'short',timeStyle:'medium'});};
+
+function typeLabel(t){const v=String(t||'').toLowerCase();
+  if(/deposit|recharge|depot/.test(v))return'Recharge';
+  if(/withdraw|retrait|payout/.test(v))return'Retrait';
+  if(/income|earning|revenu|daily/.test(v))return'Revenu';
+  if(/referral|commission|parrain/.test(v))return'Commission';
+  if(/purchase|buy|achat|product/.test(v))return'Achat de produit';
+  if(/gift|cadeau/.test(v))return'Cadeau';
+  return t?String(t).replace(/[_-]+/g,' '):'Transaction';}
+function category(t){const v=String(t.type||'').toLowerCase();
+  if(/deposit|recharge|depot/.test(v))return'deposit';
+  if(/withdraw|retrait|payout/.test(v))return'withdraw';
+  if(/income|earning|revenu|daily|referral|commission|parrain/.test(v))return'income';
+  return'other';}
+function status(s){const v=String(s||'').toLowerCase();
+  if(/success|completed|approved|paid|réussi|termine/.test(v))return['Succès','success'];
+  if(/pending|attente|processing|en cours/.test(v))return['En attente','pending'];
+  if(/fail|reject|cancel|échec|refus/.test(v))return['Échec','failed'];
+  return[s||'Non précisé','neutral'];}
+
+const ICONS={
+  deposit:['in','<path d="M12 4v12m-5-5 5 5 5-5M5 20h14"/>'],
+  withdraw:['out','<path d="M12 20V8m-5 5 5-5 5 5M5 4h14"/>'],
+  income:['inc','<path d="M4 17l6-6 4 4 6-8"/><path d="M15 7h5v5"/>'],
+  gift:['gift','<rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 6h20v4H2zM12 6v15"/>'],
+  other:['','<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>']
+};
+function iconFor(t){
+  const v=String(t.type||'').toLowerCase();
+  const k=/gift|cadeau/.test(v)?'gift':category(t);
+  const [cl,path]=ICONS[k]||ICONS.other;
+  return `<span class="ico ${cl}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg></span>`;
+}
+function row(k,v){return `<div class="row"><span class="key">${k}</span><span class="val">${v}</span></div>`;}
+
+function render(){
+  const items=transactions.filter(t=>filter==='all'||category(t)===filter);
+  if(!items.length){$('list').innerHTML='<div class="message">Aucune transaction à afficher pour ce filtre.</div>';return;}
+  $('list').innerHTML=items.map(t=>{
+    const [st,cl]=status(t.status),id=t.professional_transaction_id||t.id||'—';
+    const out=category(t)==='withdraw'||/purchase|buy|achat|product/.test(String(t.type||'').toLowerCase());
+    return `<article class="tx">
+      <div class="thead">${iconFor(t)}
+        <div class="tname"><b>${esc(typeLabel(t.type))}</b><small>${esc(date(t.created_at))}</small></div>
+        <div class="amount ${out?'minus':'plus'}">${money(t.amount,t.currency)}</div></div>
+      ${row('Numéro de commande',esc(id))}
+      ${row('Description',esc(t.description||typeLabel(t.type)))}
+      ${row('Solde après opération',money(t.balance_after,t.currency))}
+      ${row('État',`<span class="chip ${cl}">${esc(st)}</span>`)}
+    </article>`;
+  }).join('');
+}
+
+document.querySelectorAll('.filter').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));
+  filter=b.dataset.filter;render();
+}));
+
+async function load(){
+  const token=sessionStorage.getItem('vortex_session_token');
+  if(!token){
+    $('list').innerHTML='<div class="message error">Session introuvable ou expirée. Connectez-vous puis ouvrez à nouveau l’historique.</div>';
+    return;
+  }
+  try{
+    const response=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action:'my_transactions'})});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok){
+      if(response.status===401){sessionStorage.removeItem('vortex_session_token');sessionStorage.removeItem('vortex_user');throw new Error('Session expirée. Reconnectez-vous pour consulter votre historique.');}
+      throw new Error(data.error||'Impossible de charger les transactions.');
+    }
+    transactions=Array.isArray(data.items)?data.items:[];
+    render();
+  }catch(e){
+    $('list').innerHTML=`<div class="message error">${esc(e.message||'Erreur de chargement. Réessayez.')}</div>`;
+  }
+}
+load();
+})();
+</script>
+</body>
+</html>
