@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compte de retrait - VORTEX</title>
+<style>
+:root{--bg:#f0f1f5;--ink:#252a30;--muted:#9299a3;--line:#c9cdd3;--blue:#343c46;--red:#c94b53}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+header{height:76px;background:#fff;display:flex;align-items:center;gap:24px;padding:0 26px;font-size:22px;font-weight:600;color:#41474e}
+.back{border:0;background:transparent;font-size:34px;line-height:1;color:#333;padding:0;cursor:pointer}
+main{padding:24px 28px;max-width:720px;margin:auto}.panel{background:#fff;border-radius:18px;padding:30px 28px 28px}
+label{display:block;font-size:19px;margin:5px 0 15px}label span{color:var(--red)}
+select,input{width:100%;height:62px;border:2px solid var(--line);border-radius:6px;background:#f3f4f6;padding:0 20px;font-size:18px;color:#323943;margin:0 0 31px;outline:none}
+input:focus,select:focus{border-color:#737b84}input::placeholder{color:#9aa0a8}
+button.primary{display:block;width:70%;margin:10px auto 0;min-height:62px;border:0;border-radius:11px;background:linear-gradient(#525b65,#252c34);color:#fff;font-size:21px;font-weight:600;box-shadow:0 9px 20px #0002;cursor:pointer}
+.note{text-align:center;color:var(--muted);font-size:16px;line-height:1.6;margin:28px 14px}
+.account{border:2px solid var(--line);border-radius:17px;background:#f3f4f6;padding:30px 24px;display:flex;align-items:center;gap:28px;margin-bottom:25px}
+.icon{width:78px;height:54px;flex-shrink:0;color:#3b434c}.account strong{font-size:20px;display:block;margin-bottom:16px;font-weight:600}.account p{margin:0 0 14px;color:#777f89;font-size:18px}.account p:last-child{margin-bottom:0}
+.delete{width:100%;height:64px;border:2px solid #edc9cc;border-radius:13px;background:#fff;color:var(--red);font-size:19px;font-weight:600;cursor:pointer}
+.status{text-align:center;margin:14px 0;color:#777;font-size:14px}.hidden{display:none!important}
+@media(max-width:480px){header{height:76px;padding:0 24px;font-size:21px;gap:22px}main{padding:24px 28px}.panel{padding:30px 28px 28px}label{font-size:19px}select,input{height:62px;font-size:17px;padding:0 18px;margin-bottom:31px}.account{padding:30px 22px;gap:22px}.icon{width:54px}.account strong{font-size:19px}.account p{font-size:17px}.note{font-size:16px}button.primary{width:70%}}
+</style>
+</head>
+<body>
+<header><button class="back" id="back" aria-label="Retour">‹</button><span>Compte de retrait</span></header>
+<main>
+  <section id="formView" class="panel hidden">
+    <form id="accountForm">
+      <label><span>*</span> Sélectionnez le moyen de retrait</label>
+      <select id="operator" required><option value="">Chargement des moyens...</option></select>
+      <label><span>*</span> Nom du titulaire</label>
+      <input id="holder" autocomplete="name" placeholder="Veuillez saisir le nom du titulaire" required maxlength="100">
+      <label><span>*</span> Compte de retrait</label>
+      <input id="phone" inputmode="tel" autocomplete="tel" placeholder="Veuillez saisir le numéro de compte" required maxlength="30">
+      <button class="primary" type="submit">Ajouter</button>
+    </form>
+  </section>
+  <section id="accountView" class="hidden">
+    <div class="account">
+      <svg class="icon" viewBox="0 0 64 48" fill="none" aria-hidden="true"><rect x="3" y="5" width="58" height="38" rx="6" fill="currentColor"/><path d="M3 15H61" stroke="#f3f4f6" stroke-width="5"/><path d="M47 31c3-3 3-6 0-9m5 12c5-5 5-10 0-15" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/></svg>
+      <div><strong id="savedOperator">—</strong><p id="savedHolder">—</p><p id="savedNumber">—</p></div>
+    </div>
+    <p class="note">Ce compte recevra vos retraits. Vous pouvez le remplacer si nécessaire.</p>
+    <button class="delete" id="deleteAccount">Supprimer ce compte</button>
+  </section>
+  <p id="notice" class="status">Chargement de votre compte…</p>
+  <p id="footnote" class="note hidden">Le compte de retrait ne peut être enregistré qu'une seule fois. Vérifiez soigneusement vos informations.</p>
+</main>
+<script>
+const API='https://pjsfamxyftxzmjeywbgh.supabase.co/functions/v1/vortex-actions';
+const token=sessionStorage.getItem('vortex_session_token');
+const user=(()=>{try{return JSON.parse(sessionStorage.getItem('vortex_user')||'{}')}catch{return {}}})();
+const $=id=>document.getElementById(id);
+let operators=[];
+function notice(t){$('notice').textContent=t;$('notice').classList.remove('hidden')}
+async function call(action,extra={}) {
+ const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action,...extra})});
+ const data=await r.json().catch(()=>({error:'Réponse invalide du serveur'}));
+ if(!r.ok||data.error)throw new Error(data.error||data.message||'Une erreur est survenue');
+ return data;
+}
+function showForm(){ $('accountView').classList.add('hidden');$('formView').classList.remove('hidden');$('footnote').classList.remove('hidden'); }
+function showAccount(a){
+ $('formView').classList.add('hidden');$('footnote').classList.add('hidden');$('accountView').classList.remove('hidden');
+ const op=operators.find(x=>x.id===a.operator_id);
+ $('savedOperator').textContent=op?.name||a.operator_name||'Moyen de retrait';
+ $('savedHolder').textContent=a.receiver_name||'';
+ $('savedNumber').textContent=a.receiver_phone||'';
+}
+async function init(){
+ if(!token){notice('Votre session a expiré. Connectez-vous à nouveau.');return}
+ try{
+  const result=await call('payout_account_data');
+  operators=result.operators||[];
+  $('operator').innerHTML='<option value="">Veuillez sélectionner</option>'+operators.map(o=>`<option value="${o.id}">${String(o.name).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</option>`).join('');
+  if(user.country==='BF')$('phone').placeholder='Ex. : +226 70 00 00 00';
+  else if(user.country==='CI')$('phone').placeholder='Ex. : +225 07 00 00 00 00';
+  else if(user.country==='BJ')$('phone').placeholder='Ex. : +229 01 00 00 00 00';
+  else if(user.country==='TG')$('phone').placeholder='Ex. : +228 90 00 00 00';
+  else if(user.country==='CM')$('phone').placeholder='Ex. : +237 6 00 00 00 00';
+  if(result.account)showAccount(result.account);else showForm();
+  notice('');
+ }catch(e){notice(e.message||'Impossible de charger le compte.');}
+}
+$('accountForm').addEventListener('submit',async e=>{
+ e.preventDefault();const operator_id=$('operator').value,receiver_name=$('holder').value.trim(),receiver_phone=$('phone').value.trim();
+ if(!operator_id||!receiver_name||!receiver_phone){notice('Veuillez remplir tous les champs.');return}
+ const btn=e.submitter;btn.disabled=true;btn.textContent='Enregistrement…';
+ try{await call('save_payout_account',{operator_id,receiver_name,receiver_phone});await init();notice('Compte de retrait enregistré.')}
+ catch(err){notice(err.message||'Enregistrement impossible.')}
+ finally{btn.disabled=false;btn.textContent='Ajouter'}
+});
+$('deleteAccount').addEventListener('click',async()=>{
+ if(!confirm('Voulez-vous vraiment supprimer ce compte de retrait ?'))return;
+ $('deleteAccount').disabled=true;
+ try{await call('delete_payout_account');$('accountView').classList.add('hidden');showForm();notice('Compte supprimé. Vous pouvez en ajouter un autre.')}
+ catch(e){notice(e.message||'Suppression impossible.')}
+ finally{$('deleteAccount').disabled=false}
+});
+$('back').addEventListener('click',()=>{if(history.length>1)history.back();else location.href='accueil.html'});
+init();
+</script>
+</body></html>
