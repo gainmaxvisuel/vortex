@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Retirer — VORTEX</title>
+<style>
+:root{--navy:#10234e;--blue:#0969f8;--cyan:#11c7ef;--ink:#17284b;--muted:#6d7890;--bg:#f4f7fc;--line:#e4eaf4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+header{height:82px;background:linear-gradient(110deg,#071735,#172d62);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 20px;box-shadow:0 5px 18px #132b5530}
+.brand{display:flex;align-items:center;gap:10px}.mark{font-size:40px;font-weight:900;color:#16baf5;line-height:1}.brand strong{display:block;font-size:25px;letter-spacing:.5px}.brand small{display:block;font-size:12px;margin-top:1px}
+.back{border:1px solid #ffffff35;background:#ffffff12;color:white;border-radius:13px;padding:10px 13px;font-size:14px}
+main{max-width:760px;margin:auto;padding:22px 16px 40px}.heading{display:flex;align-items:center;gap:12px;margin:2px 0 20px}.heading .symbol{width:48px;height:48px;border-radius:15px;background:#e5efff;color:#075cf0;display:grid;place-items:center;font-size:25px}.heading h1{margin:0;font-size:25px}.heading p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.panel{background:#fff;border:1px solid #eaf0f8;border-radius:20px;padding:20px;margin-bottom:15px;box-shadow:0 8px 22px #12264d08}
+.balance{background:linear-gradient(120deg,#0c2454,#1254b6);color:white;border:0;position:relative;overflow:hidden}.balance:after{content:"V";position:absolute;right:20px;bottom:-40px;font-size:150px;font-weight:900;color:#ffffff0b}.eyebrow{font-size:14px;color:#d3e2ff}.big{font-size:32px;font-weight:800;margin:7px 0 3px;letter-spacing:.2px}.sub{font-size:13px;color:#d4e1f8}
+.section-title{font-size:17px;font-weight:750;margin:0 0 15px;display:flex;align-items:center;gap:9px}.section-title:before{content:"";height:22px;width:4px;border-radius:5px;background:var(--blue)}
+label{display:block;font-size:14px;font-weight:650;margin:15px 0 8px}.field{width:100%;border:1.5px solid #d8e0ed;border-radius:13px;background:#f8faff;padding:15px 14px;font-size:16px;color:var(--ink);outline:none}.field:focus{border-color:#4385fa;box-shadow:0 0 0 3px #0969f814}select.field{appearance:auto}.row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:12px}.row b{color:var(--ink)}.receive{background:#f0f6ff;border-radius:13px;padding:15px;display:flex;justify-content:space-between;align-items:center;margin-top:15px}.receive span{color:#61718c;font-size:13px}.receive strong{font-size:21px;color:#075be9}
+button.primary{width:100%;border:0;border-radius:30px;padding:16px;background:linear-gradient(100deg,#0759e9,#2586ff);color:white;font-size:17px;font-weight:750;box-shadow:0 8px 18px #1265ec2b;margin-top:6px}button:disabled{opacity:.55}
+.note{font-size:13px;line-height:1.7;color:#586783;margin:0;padding-left:19px}.note li{padding-left:3px;margin:6px 0}.status{display:none;border-radius:12px;padding:12px 14px;margin:12px 0;font-size:14px}.status.error{display:block;background:#fff0f0;color:#a62c36}.status.ok{display:block;background:#eaf9f0;color:#187443}.empty{background:#fff7e6;color:#835b0d;padding:13px;border-radius:12px;font-size:13px;line-height:1.5}
+.small{font-size:12px;color:var(--muted);line-height:1.5}.foot{padding:15px 5px;text-align:center;color:#9aa5b8;font-size:12px}
+@media(max-width:480px){header{height:72px;padding:0 14px}.brand strong{font-size:22px}.brand small{font-size:10px}.mark{font-size:35px}main{padding:18px 13px 32px}.panel{padding:17px;border-radius:17px}.big{font-size:29px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="mark">V</div><div><strong>VORTEX</strong><small>Investir aujourd'hui, bâtir demain</small></div></div><button class="back" onclick="history.length>1?history.back():location.href='accueil.html'">← Retour</button></header>
+<main>
+<div class="heading"><div class="symbol">⇄</div><div><h1>Retirer mes fonds</h1><p>Demandez un retrait vers votre compte enregistré</p></div></div>
+<section class="panel balance"><div class="eyebrow">Solde disponible</div><div class="big" id="balance">—</div><div class="sub" id="currency-note">Chargement du solde…</div></section>
+<section class="panel">
+<h2 class="section-title">Compte de retrait</h2>
+<div id="account-view"><p class="small">Chargement du compte enregistré…</p></div>
+</section>
+<section class="panel">
+<h2 class="section-title">Montant du retrait</h2>
+<label for="amount">Montant à retirer</label>
+<input class="field" id="amount" type="number" min="1" step="100" inputmode="numeric" placeholder="Saisissez le montant">
+<div class="row"><span>Frais de retrait : <b id="fee-rate">—</b></span><span>Minimum : <b id="minimum">—</b></span></div>
+<div class="receive"><div><span>Montant net estimé reçu</span><div class="small">Après déduction des frais</div></div><strong id="net">0 XOF</strong></div>
+<div id="message" class="status"></div>
+<button class="primary" id="submit" disabled>Confirmer le retrait</button>
+<p class="small" style="margin-top:12px">La demande sera envoyée pour traitement après vérification des règles de retrait de la plateforme.</p>
+</section>
+<section class="panel"><h2 class="section-title">Conditions de retrait</h2><ol class="note" id="conditions"><li>Chargement des conditions depuis la base de données…</li></ol></section>
+<div class="foot">VORTEX · Plateforme sécurisée</div>
+</main>
+<script>
+const API='https://pjsfamxyftxzmjeywbgh.supabase.co/functions/v1/vortex-actions';
+const token=sessionStorage.getItem('vortex_session_token');
+let state={balance:0,currency:'XOF',account:null,fee:18,minimum:1200,start:'08:00',end:'18:00',timezone:'Africa/Ouagadougou',dailyLimit:3,hasProduct:false};
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(Math.floor(Number(n)||0))+' '+state.currency;
+async function call(action,extra={}){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({action,...extra})});let d={};try{d=await r.json()}catch{}if(!r.ok)throw Error(d.error||'Une erreur est survenue.');return d}
+function showMessage(msg,type='error'){$('message').className='status '+type;$('message').textContent=msg}
+function netAmount(amount){const raw=Math.max(0,amount*(1-state.fee/100));return Math.floor(raw/100)*100}
+function updateCalc(){const a=Math.max(0,Number($('amount').value)||0);$('net').textContent=money(netAmount(a));$('submit').disabled=!token||!state.account||a<state.minimum||a>state.balance||a<=0}
+function renderAccount(){const el=$('account-view');if(!state.account){el.innerHTML='<div class="empty">Aucun compte de retrait enregistré. Enregistrez d’abord votre compte de retrait avant de continuer.</div><p style="margin:14px 0 0"><a href="compte-retrait-vortex.html" style="color:#075be9;font-weight:700;text-decoration:none">＋ Enregistrer un compte de retrait</a></p>';return}
+const a=state.account;el.innerHTML='<div style="display:flex;align-items:center;gap:13px"><div style="width:46px;height:46px;border-radius:13px;background:#e8f1ff;color:#075be9;display:grid;place-items:center;font-size:22px">▣</div><div style="flex:1"><strong>'+esc(a.operator_name||'Moyen de retrait')+'</strong><div class="small">'+esc(a.receiver_name||'')+'</div><div class="small">'+esc(a.receiver_phone||'')+'</div></div><span style="color:#16a05d;font-size:12px;font-weight:700">Enregistré</span></div><p style="margin:14px 0 0"><a href="compte-retrait-vortex.html" style="color:#075be9;font-weight:650;text-decoration:none">Gérer mon compte →</a></p>'}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderConditions(){const list=[`Montant minimum de retrait : ${money(state.minimum)}.`,`Frais de retrait : ${state.fee}% du montant demandé. Le montant net estimé est arrondi au multiple de 100 inférieur.`,`Les demandes sont acceptées de ${state.start} à ${state.end} (${state.timezone}).`,`Limite quotidienne : ${state.dailyLimit} demande(s) par jour.`,`Un compte de retrait valide doit être enregistré.`,`Une restriction de retrait ou l’absence d’investissement actif peut empêcher la demande.`];$('conditions').innerHTML=list.map(x=>'<li>'+esc(x)+'</li>').join('')}
+async function init(){if(!token){showMessage('Connectez-vous à votre compte VORTEX pour effectuer un retrait.');$('account-view').innerHTML='<div class="empty">Session non détectée. Connectez-vous puis revenez sur cette page.</div>';return}
+try{
+const [me,pa,settings]=await Promise.all([call('me'),call('payout_account_data'),call('withdrawal_settings').catch(()=>({}))]);
+state.balance=Number(me.wallet?.balance||0);state.currency=me.user?.currency||pa.currency||'XOF';state.account=pa.account||me.payout_account||null;
+const s=settings.settings||settings;
+if(s.withdrawal_fee_percent!=null)state.fee=Number(s.withdrawal_fee_percent);
+if(s.withdrawal_minimum!=null)state.minimum=Number(s.withdrawal_minimum);
+if(s.withdrawal_daily_limit!=null)state.dailyLimit=Number(s.withdrawal_daily_limit);
+if(s.withdrawal_hours){state.start=s.withdrawal_hours.start||state.start;state.end=s.withdrawal_hours.end||state.end;state.timezone=s.withdrawal_hours.timezone||state.timezone}
+$('balance').textContent=money(state.balance);$('currency-note').textContent='Solde disponible sur votre portefeuille';$('fee-rate').textContent=state.fee+'%';$('minimum').textContent=money(state.minimum);renderAccount();renderConditions();updateCalc();
+}catch(e){showMessage(e.message||'Impossible de charger les données.');}}
+$('amount').addEventListener('input',()=>{updateCalc();$('message').className='status';});
+$('submit').addEventListener('click',async()=>{const amount=Number($('amount').value);if(!state.account)return showMessage('Enregistrez d’abord un compte de retrait.');if(amount<state.minimum)return showMessage('Le montant minimum est '+money(state.minimum)+'.');if(amount>state.balance)return showMessage('Votre solde disponible est insuffisant.');if(!confirm('Confirmer une demande de '+money(amount)+' ? Montant net estimé : '+money(netAmount(amount))+'.'))return;
+$('submit').disabled=true;$('submit').textContent='Envoi en cours…';
+try{const r=await call('create_withdrawal',{amount,payout_account_id:state.account.id});showMessage(r.message||'Votre demande de retrait a été enregistrée.','ok');if(r.balance_after!=null){state.balance=Number(r.balance_after);$('balance').textContent=money(state.balance)}$('amount').value='';updateCalc()}catch(e){showMessage(e.message||'La demande n’a pas pu être envoyée.')}finally{$('submit').textContent='Confirmer le retrait';updateCalc()}});
+init();
+</script>
+</body></html>
