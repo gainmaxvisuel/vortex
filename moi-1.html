@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e2150">
+<title>Moi | Vortex</title>
+<style>
+:root{--navy:#0e2150;--blue:#1769f5;--ink:#13264e;--muted:#6d7c98;--bg:#f5f8fd;--line:#e2ebfb}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);padding-bottom:84px}
+a,button{font:inherit;color:inherit;text-decoration:none}button{cursor:pointer}svg{display:block}
+
+.top{background:linear-gradient(115deg,#0c1d47,#142a5e);color:#fff;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 5px 20px #10245128}
+.brand{display:flex;align-items:center;gap:8px}
+.vlogo{width:42px;height:35px}
+.brandname{font-size:22px;font-weight:800;letter-spacing:.8px;line-height:1}
+.tagline{font-size:10px;margin-top:3px;color:#e6eefc;white-space:nowrap}
+.pagetitle{font-size:13px;font-weight:700;color:#cfe0ff}
+
+main{max-width:720px;margin:auto;padding:12px 12px 14px}
+
+/* Profil */
+.profile{display:flex;align-items:center;gap:13px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 5px 14px #10245108;margin-bottom:12px}
+.pavatar{width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#143c8a,#071d4a);display:grid;place-items:center;flex:0 0 auto}
+.pavatar svg{width:28px;height:24px}
+.pinfo{min-width:0;flex:1}
+.pinfo .phone{font-size:16px;font-weight:800;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:6px;margin-top:5px;font-size:10.5px;font-weight:700;color:#0c7a4b;background:#e3f6ef;border-radius:20px;padding:3px 9px}
+.badge i{width:6px;height:6px;border-radius:50%;background:#1ea565;display:block}
+.badge.off{color:#9a6500;background:#fff2dc}.badge.off i{background:#e0a020}
+
+/* Solde */
+.balance{position:relative;overflow:hidden;border-radius:18px;padding:16px;color:#fff;background:linear-gradient(150deg,#143c8a,#0b1f4f);box-shadow:0 8px 22px #112c5420;margin-bottom:14px}
+.balance:after{content:"";position:absolute;width:240px;height:100px;border:1px solid #49aaff35;border-radius:50%;right:-60px;bottom:-45px;transform:rotate(-14deg)}
+.blabel{font-size:12px;color:#d1def7;display:flex;align-items:center;gap:8px}
+.eyebtn{border:0;background:#ffffff1f;width:28px;height:18px;border-radius:12px;display:grid;place-items:center;color:#cfe3ff;padding:0}
+.eyebtn svg{width:13px;height:13px}.eyebtn .slash{opacity:0}.eyebtn.off .slash{opacity:1}
+.amount{font-size:30px;font-weight:800;letter-spacing:-.6px;margin:7px 0 3px;overflow-wrap:anywhere}
+.amount span{font-size:.55em;font-weight:700;color:#dce8ff}
+.bnote{font-size:10.5px;color:#c4d5f5}
+.bnote.err{color:#ffd0d0}
+.bactions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px;position:relative;z-index:2}
+.bactions a{height:42px;border-radius:21px;display:flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:13px}
+.bactions svg{width:18px;height:18px}
+.b-rech{background:#fff;color:var(--navy)}
+.b-ret{background:#ffffff1f;border:1px solid #ffffff40;color:#fff}
+
+/* Menus */
+.group{margin:0 0 14px}
+.gtitle{font-size:12px;font-weight:700;color:#647590;text-transform:uppercase;letter-spacing:.8px;margin:0 4px 8px}
+.list{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 5px 14px #10245108}
+.row{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid #edf2fa;background:#fff;width:100%;text-align:left;border-left:0;border-right:0;border-top:0}
+.row:last-child{border-bottom:0}
+.row:active{background:#f4f8ff}
+.ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex:0 0 auto;background:#eaf1ff;color:#175ed1}
+.ic svg{width:20px;height:20px}
+.ic.green{background:#e6f6ee;color:#18794e}
+.ic.violet{background:#f0edff;color:#5b46b8}
+.ic.orange{background:#fff1e2;color:#c76514}
+.ic.slate{background:#eef2f8;color:#47607f}
+.txt{flex:1;min-width:0}
+.txt b{display:block;font-size:14px;font-weight:700;color:var(--navy)}
+.txt small{display:block;font-size:11px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chev{width:18px;height:18px;color:#9aa8bf;flex:0 0 auto}
+
+.logout{width:100%;height:48px;border-radius:24px;border:1px solid #f0c9cf;background:#fff;color:#c0283c;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;gap:9px;margin-top:4px}
+.logout svg{width:19px;height:19px}
+.foot{font-size:10.5px;color:#8491a6;text-align:center;margin:16px 0 0}
+
+.bottom{position:fixed;z-index:5;bottom:0;left:0;right:0;background:#ffffffee;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid #e2e9f4;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px calc(5px + env(safe-area-inset-bottom));box-shadow:0 -5px 18px #0d21450a}
+.bottom a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:#7585a1;padding:2px}
+.bottom svg{width:23px;height:23px}
+.bottom a.active{color:var(--blue);font-weight:600}
+
+@media(min-width:700px){main{padding:24px}.amount{font-size:36px}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="vg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34d3f2"/><stop offset=".55" stop-color="#1a7cf5"/><stop offset="1" stop-color="#1448d6"/></linearGradient>
+    <symbol id="vmark" viewBox="0 0 64 52"><path d="M2 3h15l15 27L47 3h15L40 46a9 9 0 0 1-16 0z" fill="url(#vg)"/><path d="M17 3l15 27 4-7L24 3z" fill="#ffffff2e"/></symbol>
+    <symbol id="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <a class="brand" href="accueil.html" aria-label="Vortex accueil">
+    <svg class="vlogo"><use href="#vmark"/></svg>
+    <div><div class="brandname">VORTEX</div><div class="tagline">Investir aujourd'hui, bâtir demain</div></div>
+  </a>
+  <div class="pagetitle">Mon espace</div>
+</header>
+
+<main>
+  <section class="profile">
+    <div class="pavatar"><svg><use href="#vmark"/></svg></div>
+    <div class="pinfo">
+      <div class="phone" id="userPhone">Compte utilisateur</div>
+      <span class="badge off" id="badge"><i></i><span id="status">Connexion…</span></span>
+    </div>
+  </section>
+
+  <section class="balance">
+    <div class="blabel">Solde disponible
+      <button class="eyebtn" id="eyeBal" type="button" aria-label="Masquer ou afficher le solde"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="slash" d="M4 4l16 16"/></svg></button>
+    </div>
+    <div class="amount" id="balance">— <span>XOF</span></div>
+    <div class="bnote" id="bnote">Devise du compte : <span id="currency">XOF</span></div>
+    <div class="bactions">
+      <a class="b-rech" href="recharge.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Recharger</a>
+      <a class="b-ret" href="retrait.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m-5-5 5 5 5-5M5 20h14"/></svg>Retirer</a>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2 class="gtitle">Mes opérations</h2>
+    <div class="list">
+      <a class="row" href="historique.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2M3 4v5h5"/></svg></span><span class="txt"><b>Historique</b><small>Recharges, retraits et revenus</small></span><svg class="chev"><use href="#chev"/></svg></a>
+      <a class="row" href="mission-vortex.html"><span class="ic orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8L12 3z"/></svg></span><span class="txt"><b>Mission</b><small id="missionCount">Voir les récompenses</small></span><svg class="chev"><use href="#chev"/></svg></a>
+      <a class="row" href="cadeau.html"><span class="ic violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 6h20v4H2zM12 6v15M12 6H8a2 2 0 1 1 2-2c0 2 2 2 2 2zm0 0h4a2 2 0 1 0-2-2c0 2-2 2-2 2z"/></svg></span><span class="txt"><b>Cadeau</b><small>Utiliser un code cadeau</small></span><svg class="chev"><use href="#chev"/></svg></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2 class="gtitle">Mon compte</h2>
+    <div class="list">
+      <a class="row" href="compte-retrait.html"><span class="ic green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg></span><span class="txt"><b>Compte de retrait</b><small>Lier ou modifier mon compte</small></span><svg class="chev"><use href="#chev"/></svg></a>
+      <a class="row" href="mot-de-passe.html"><span class="ic slate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></svg></span><span class="txt"><b>Mot de passe</b><small>Modifier mon mot de passe</small></span><svg class="chev"><use href="#chev"/></svg></a>
+    </div>
+  </section>
+
+  <section class="group">
+    <h2 class="gtitle">Assistance</h2>
+    <div class="list">
+      <a class="row" href="support.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="12" width="4" height="7" rx="2"/><rect x="17" y="12" width="4" height="7" rx="2"/><path d="M17 20h-5"/></svg></span><span class="txt"><b>Support</b><small>Contacter l’assistance</small></span><svg class="chev"><use href="#chev"/></svg></a>
+      <a class="row" href="politique-confidentialite.html"><span class="ic slate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7"/></svg></span><span class="txt"><b>Politique et confidentialité</b><small>Conditions d’utilisation</small></span><svg class="chev"><use href="#chev"/></svg></a>
+    </div>
+  </section>
+
+  <button class="logout" type="button" id="logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>Se déconnecter</button>
+  <p class="foot">VORTEX · Espace utilisateur sécurisé</p>
+</main>
+
+<nav class="bottom" aria-label="Navigation fixe">
+  <a href="accueil.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m3 10 9-8 9 8v11h-6v-7H9v7H3z"/></svg>Accueil</a>
+  <a href="produit.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 3 7v10l9 5 9-5V7zm0 2.2 6.3 3.5L12 11.2 5.7 7.7zM5 9.4l6 3.3v7.1l-6-3.3zm14 0v7.1l-6 3.3v-7.1z"/></svg>Produits</a>
+  <a href="equipe.html"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="3.5"/><circle cx="5" cy="9.5" r="2.5"/><circle cx="19" cy="9.5" r="2.5"/><path d="M5 20v-2.5a7 7 0 0 1 14 0V20z"/></svg>Équipe</a>
+  <a class="active" href="moi.html"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="5"/><path d="M3 22a9 9 0 0 1 18 0z"/></svg>Moi</a>
+</nav>
+
+<script>
+const BASE='https://pjsfamxyftxzmjeywbgh.supabase.co/functions/v1/';
+const $=id=>document.getElementById(id);
+const token=()=>sessionStorage.getItem('vortex_session_token');
+function pick(obj,paths){for(const path of paths){let v=obj;for(const k of path.split('.'))v=v?.[k];if(v!==undefined&&v!==null&&v!=='')return v;}return null}
+async function api(fn,payload){
+  const h={'Content-Type':'application/json'};
+  if(token())h.Authorization='Bearer '+token();
+  const r=await fetch(BASE+fn,{method:'POST',headers:h,body:JSON.stringify(payload)});
+  let d={};try{d=await r.json()}catch{}
+  if(!r.ok||d.error)throw new Error(d.error||d.message||'Requête impossible');
+  return d;
+}
+function currencyFor(user,wallet){
+  const saved=pick(user,['currency'])||pick(wallet,['currency']);
+  if(saved==='XAF'||saved==='XOF')return saved;
+  return pick(user,['country'])==='CM'?'XAF':'XOF';
+}
+const nf=new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0});
+let balanceHTML='— <span>XOF</span>',hidden=false;
+function paint(){$('balance').innerHTML=hidden?'••••• <span>'+($('currency').textContent||'XOF')+'</span>':balanceHTML;$('eyeBal').classList.toggle('off',hidden)}
+$('eyeBal').addEventListener('click',()=>{hidden=!hidden;paint()});
+function setStatus(text,ok){$('status').textContent=text;$('badge').classList.toggle('off',!ok)}
+
+$('logout').addEventListener('click',()=>{
+  sessionStorage.removeItem('vortex_session_token');
+  sessionStorage.removeItem('vortex_user');
+  sessionStorage.removeItem('vortex_popup_for');
+  location.href='connexion.html';
+});
+
+(async()=>{
+  if(!token()){
+    setStatus('Session absente',false);
+    $('bnote').textContent='Veuillez vous reconnecter.';
+    $('bnote').classList.add('err');
+    return;
+  }
+  try{
+    const d=await api('vortex-actions',{action:'me'});
+    const user=pick(d,['user','profile'])||d;
+    const wallet=pick(d,['wallet','data.wallet'])||{};
+    let cached={};try{cached=JSON.parse(sessionStorage.getItem('vortex_user')||'{}')}catch{}
+    const phone=pick(user,['phone','phone_number','mobile'])||pick(cached,['phone','phone_number','mobile'])||'Compte utilisateur';
+    $('userPhone').textContent=String(phone);
+    const c=currencyFor(user,wallet);
+    $('currency').textContent=c;
+    const balance=pick(wallet,['balance','available_balance'])??pick(user,['balance','wallet_balance'])??pick(d,['balance']);
+    const n=Number(balance);
+    balanceHTML=Number.isFinite(n)?nf.format(n)+' <span>'+c+'</span>':'— <span>'+c+'</span>';
+    paint();
+    setStatus('Compte actif',true);
+    try{
+      const rd=await api('vortex-actions',{action:'referral_summary'});
+      $('missionCount').textContent=(Number(rd.direct_invites||0))+' personne(s) invitée(s) · niveau 1';
+    }catch{}
+  }catch(e){
+    setStatus('Solde indisponible',false);
+    $('bnote').textContent='Vérifiez votre connexion.';
+    $('bnote').classList.add('err');
+  }
+})();
+</script>
+</body>
+</html>
